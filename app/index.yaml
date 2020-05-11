@@ -1,0 +1,59 @@
+openapi: 3.0.0
+info:
+  version: 0.9.0
+  title: API
+  description: >-
+    example
+
+servers:
+  - description: local
+    url: "http://localhost"
+
+paths:
+  #Auth
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Вход по логину с паролем
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components.yaml#/components/schemas/LoginPasswordRequest"
+      responses:
+        "200":
+          $ref: "./components.yaml#/components/responses/TokenResponse"
+        "400":
+          $ref: "./components.yaml#/components/responses/Error"
+
+  #Localizations
+  /localizations/{app}:
+    get:
+      tags:
+        - Localizations
+      summary: Получение локализаций
+      parameters:
+        - $ref: "./components.yaml#/components/parameters/Lang"
+        - $ref: "./components.yaml#/components/parameters/Application"
+        - $ref: "./components.yaml#/components/parameters/StringName"
+      responses:
+        "200":
+          $ref: "./components.yaml#/components/responses/LocalizationResponse"
+        "400":
+          $ref: "./components.yaml#/components/responses/Error"
+
+  #Personal
+  /personal/clients/{client_id}/medcards:
+    get:
+      summary: Получение списка медкарт
+      tags:
+        - Personal
+      parameters:
+        - $ref: "./components.yaml#/components/parameters/UserId"
+      responses:
+        "200":
+          $ref: "./components.yaml#/components/responses/MedcardsResponse"
+        "400":
+          $ref: "./components.yaml#/components/responses/Error"

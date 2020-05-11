@@ -1,0 +1,150 @@
+openapi: 3.0.0
+info:
+  version:  ""
+  title: ""
+paths: {}
+
+components:
+  responses:
+    Error:
+      description: Все плохо
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    TokenResponse:
+      description: Все хорошо
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TokenResponse"
+
+    LocalizationResponse:
+      description: Все хорошо
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/LocalizationString"
+
+    MedcardsResponse:
+      description: Все хорошо
+      content:
+       application/json:
+         schema:
+           type: array
+           items:
+             $ref: "components.yaml#/components/schemas/Medcard"
+
+  parameters:
+    Lang:
+      in: header
+      name: Lang
+      required: false
+      description: Язык интерфейса
+      schema:
+        type: string
+        enum:
+          - en
+          - ru
+
+    Application:
+      in: path
+      name: app
+      required: true
+      description: Версия приложения
+      schema:
+        type: string
+        enum:
+          - web
+          - ios
+          - android
+
+    StringName:
+      in: query
+      name: name
+      required: false
+      description: Фильтр по названию
+      schema:
+        type: string
+
+    UserId:
+      in: path
+      name: client_id
+      required: true
+      description: ID клиента
+      schema:
+        type: int
+
+  schemas:
+    Error:
+      type: object
+      description: Ошибка
+      properties:
+        code:
+          description: Код ошибки
+          type: integer
+          example: 400
+        message:
+          description: Описание ошибки
+          type: string
+          example: Текст ошибки
+
+    LoginPasswordRequest:
+      type: object
+      properties:
+        login:
+          description: Логин пользователя
+          type: string
+          example: 'login'
+        password:
+          description: Пароль пользователя
+          type: string
+          example: 'password'
+
+    TokenResponse:
+      type: object
+      properties:
+        accessToken:
+          description: Токен доступа
+          type: string
+          format: byte
+        expiresIn:
+          description: Время жизни токена доступа в секундах
+          type: integer
+          example: 300
+        refreshToken:
+          description: Рефреш-токен
+          type: string
+
+    LocalizationString:
+      type: object
+      description: Перевод строковых ресурсов на выбранный язык
+      properties:
+        name:
+          type: string
+          example: "login.title"
+        string:
+          type: string
+          example: "Регистрация"
+
+    Medcard:
+      description: Медкарта пользователя
+      allOf:
+        - type: object
+          properties:
+            id:
+              description: ID медкарты
+              type: integer
+              example: 1
+            name:
+              description: Имя
+              type: string
+            birthday:
+              description: Дата рождения
+              type: string
+            photo:
+              description: Ссылка на фото пользователя
+              type: string
